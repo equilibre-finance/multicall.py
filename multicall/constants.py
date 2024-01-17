@@ -62,7 +62,7 @@ MULTICALL_ADDRESSES: Dict[int, str] = {
     Network.Kava: "0x7ED7bBd8C454a1B0D9EdD939c45a81A03c20131C",
     Network.KavaTestnet: "0x1Af096bFA8e495c2F5Eeb56141E7E2420066Cf78",
     Network.Neon: "",
-    Network.NeonTestnet: "0x25ca3395E673DEDd37345639F65D011844931f1C",
+    Network.NeonTestnet: "0x60B59FFA8d66910db6B68F90eBd44f32c976Ff10",
 }
 
 MULTICALL2_ADDRESSES: Dict[int, str] = {
@@ -84,7 +84,7 @@ MULTICALL2_ADDRESSES: Dict[int, str] = {
     Network.OptimismKovan: "0x2DC0E2aa608532Da689e89e237dF582B783E552C",
     Network.Kava: "0x30A62aA52Fa099C4B227869EB6aeaDEda054d121",
     Network.Neon: "",
-    Network.NeonTestnet: "0x70BF311E508c0DbF7698751D7852f9827ca6b87B",
+    Network.NeonTestnet: "0x25ca3395E673DEDd37345639F65D011844931f1C",
 }
 
 # With default AsyncBaseProvider settings, some dense calls will fail
