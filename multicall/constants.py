@@ -62,7 +62,7 @@ MULTICALL_ADDRESSES: Dict[int, str] = {
     Network.Kava: "0x7ED7bBd8C454a1B0D9EdD939c45a81A03c20131C",
     Network.KavaTestnet: "0x1Af096bFA8e495c2F5Eeb56141E7E2420066Cf78",
     Network.Neon: "",
-    Network.NeonTestnet: "0x60B59FFA8d66910db6B68F90eBd44f32c976Ff10",
+    Network.NeonTestnet: "0xcFC8002c27985410F7a5Df76f418E5F1a460e1eb",
 }
 
 MULTICALL2_ADDRESSES: Dict[int, str] = {
