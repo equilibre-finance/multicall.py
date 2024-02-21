@@ -43,6 +43,8 @@ class Network(IntEnum):
     KavaTestnet = 2221
     Neon = 245022934
     NeonTestnet = 245022926
+    Scroll = 534352
+    ScrollSepolia = 534351
 
 
 MULTICALL_ADDRESSES: Dict[int, str] = {
@@ -63,6 +65,8 @@ MULTICALL_ADDRESSES: Dict[int, str] = {
     Network.KavaTestnet: "0x1Af096bFA8e495c2F5Eeb56141E7E2420066Cf78",
     Network.Neon: "",
     Network.NeonTestnet: "0xcFC8002c27985410F7a5Df76f418E5F1a460e1eb",
+    Network.Scroll: "",
+    Network.ScrollSepolia: "0xA17786896F1b5CF22600925cB680998cae8401f5"
 }
 
 MULTICALL2_ADDRESSES: Dict[int, str] = {
@@ -85,6 +89,8 @@ MULTICALL2_ADDRESSES: Dict[int, str] = {
     Network.Kava: "0x30A62aA52Fa099C4B227869EB6aeaDEda054d121",
     Network.Neon: "",
     Network.NeonTestnet: "0x25ca3395E673DEDd37345639F65D011844931f1C",
+    Network.Scroll: "",
+    Network.ScrollSepolia: "0x3a4420401d769B8a7755B537c04aD03238614E7e"
 }
 
 # With default AsyncBaseProvider settings, some dense calls will fail
