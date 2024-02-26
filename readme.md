@@ -22,9 +22,9 @@ def from_wei(value):
     return value / 1e18
 
 multi = Multicall([
-    Call(MKR_TOKEN, ['balanceOf(address)(uint256)', MKR_WHALE], [('whale', from_wei)]),
-    Call(MKR_TOKEN, ['balanceOf(address)(uint256)', MKR_FISH], [('fish', from_wei)]),
-    Call(MKR_TOKEN, 'totalSupply()(uint256)', [('supply', from_wei)]),
+    Call(MKR_TOKEN, ['balanceOf(address)(uint256)', MKR_WHALE], [['whale', from_wei]]),
+    Call(MKR_TOKEN, ['balanceOf(address)(uint256)', MKR_FISH], [['fish', from_wei]]),
+    Call(MKR_TOKEN, 'totalSupply()(uint256)', [['supply', from_wei]]),
 ])
 
 multi()  # {'whale': 566437.0921992733, 'fish': 7005.0, 'supply': 1000003.1220798912}
@@ -33,7 +33,7 @@ multi()  # {'whale': 566437.0921992733, 'fish': 7005.0, 'supply': 1000003.122079
 Call(MKR_TOKEN, ['balanceOf(address)(uint256)', MKR_WHALE])()
 Call(MKR_TOKEN, 'balanceOf(address)(uint256)')(MKR_WHALE)
 # return values processing
-Call(MKR_TOKEN, 'totalSupply()(uint256)', [('supply', from_wei)])()
+Call(MKR_TOKEN, 'totalSupply()(uint256)', [['supply', from_wei]])()
 ```
 
 for a full example, see implementation of [daistats](https://github.com/banteg/multicall.py/blob/master/examples/daistats.py).
@@ -51,7 +51,7 @@ use `encode_data(args)` with input args to get the calldata. use `decode_data(ou
 
 - `target` is the `to` address which is supplied to `eth_call`.
 - `function` can be either seth-style signature of `method(input,types)(output,types)` or a list of `[signature, *args]`.
-- `returns` is a list of tuples of `(name, handler)` for return values. if `returns` argument is omitted, you get a tuple, otherwise you get a dict. to skip processing of a value, pass `None` as a handler.
+- `returns` is a list of `[name, handler]` for return values. if `returns` argument is omitted, you get a tuple, otherwise you get a dict. to skip processing of a value, pass `None` as a handler.
 
 use `Call(...)()` with predefined args or `Call(...)(args)` to reuse a prepared call with different args.
 
@@ -69,10 +69,3 @@ use `Multicall(...)()` to get the result of a prepared multicall.
 - MULTICALL_DEBUG: if set, sets logging level for all library loggers to logging.DEBUG
 - MULTICALL_PROCESSES: pass an integer > 1 to use multiprocessing for encoding args and decoding results. Default: 1, which executes all code in the main process.
 - AIOHTTP_TIMEOUT: sets aiohttp timeout period in seconds for async calls to node. Default: 30
-
-## test
-```bash
-export WEB3_INFURE_PROJECT_ID=<your_infura_id>
-export PYTEST_NETWORK='mainnet'
-poetry run python -m pytest
-```

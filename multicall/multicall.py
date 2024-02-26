@@ -8,9 +8,9 @@ from web3 import Web3
 
 from multicall import Call
 from multicall.constants import (GAS_LIMIT, MULTICALL2_ADDRESSES,
-                                 MULTICALL3_ADDRESSES, MULTICALL3_BYTECODE, w3)
+                                 MULTICALL2_BYTECODE, MULTICALL_ADDRESSES, w3)
 from multicall.loggers import setup_logger
-from multicall.utils import (_get_semaphore, await_awaitable, chain_id, gather,
+from multicall.utils import (await_awaitable, chain_id, gather,
                              run_in_subprocess, state_override_supported)
 
 logger = setup_logger(__name__)
@@ -30,7 +30,6 @@ def unpack_batch_results(batch_results: List[List[CallResponse]]) -> List[CallRe
 
 
 class Multicall:
-    __slots__ = "calls", "block_id", "require_success", "gas_limit", "w3", "chainid", "multicall_sig", "multicall_address"
     def __init__(
         self, 
         calls: List[Call],
@@ -46,21 +45,18 @@ class Multicall:
         self.w3 = _w3
         self.chainid = chain_id(self.w3)
         if require_success is True:
-            multicall_map = MULTICALL3_ADDRESSES if self.chainid in MULTICALL3_ADDRESSES else MULTICALL2_ADDRESSES
+            multicall_map = MULTICALL_ADDRESSES if self.chainid in MULTICALL_ADDRESSES else MULTICALL2_ADDRESSES
             self.multicall_sig = 'aggregate((address,bytes)[])(uint256,bytes[])'
         else:
-            multicall_map = MULTICALL3_ADDRESSES if self.chainid in MULTICALL3_ADDRESSES else MULTICALL2_ADDRESSES
+            multicall_map = MULTICALL2_ADDRESSES
             self.multicall_sig = 'tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])'
         self.multicall_address = multicall_map[self.chainid]
 
     def __call__(self) -> Dict[str,Any]:
         start = time()
-        response = await_awaitable(self)
+        response = await_awaitable(self.coroutine())
         logger.debug(f"Multicall took {time() - start}s")
         return response
-     
-    def __await__(self) -> Dict[str,Any]:
-        return self.coroutine().__await__()
 
     async def coroutine(self) -> Dict[str,Any]:
         batches = await gather([
@@ -81,22 +77,21 @@ class Multicall:
         if calls is None:
             calls = self.calls
         
-        async with _get_semaphore():
-            try:
-                args = await run_in_subprocess(get_args, calls, self.require_success)
-                if self.require_success is True:
-                    _, outputs = await self.aggregate.coroutine(args)
-                    outputs = await run_in_subprocess(unpack_aggregate_outputs, outputs)
-                else:
-                    _, _, outputs = await self.aggregate.coroutine(args)
-                outputs = await gather([
-                    run_in_subprocess(Call.decode_output, output, call.signature, call.returns, success)
-                    for call, (success, output) in zip(calls, outputs)
-                ])
-                logger.debug(f"coroutine {id} finished")
-                return outputs
-            except Exception as e:
-                _raise_or_proceed(e, len(calls), ConnErr_retries=ConnErr_retries)
+        try:
+            args = await run_in_subprocess(get_args, calls, self.require_success)
+            if self.require_success is True:
+                _, outputs = await self.aggregate.coroutine(args)
+                outputs = await run_in_subprocess(unpack_aggregate_outputs, outputs)
+            else:
+                _, _, outputs = await self.aggregate.coroutine(args)
+            outputs = await gather([
+                run_in_subprocess(Call.decode_output, output, call.signature, call.returns, success)
+                for call, (success, output) in zip(calls, outputs)
+            ])
+            logger.debug(f"coroutine {id} finished")
+            return outputs
+        except Exception as e:
+            _raise_or_proceed(e, len(calls), ConnErr_retries=ConnErr_retries)
         
         # Failed, we need to rebatch the calls and try again.
         batch_results = await gather([
@@ -118,7 +113,7 @@ class Multicall:
                 _w3=self.w3,
                 block_id=self.block_id,
                 gas_limit=self.gas_limit,
-                state_override_code=MULTICALL3_BYTECODE
+                state_override_code=MULTICALL2_BYTECODE
             )
         
         # If state override is not supported, we simply skip it.
@@ -138,7 +133,6 @@ class NotSoBrightBatcher:
     This class helps with processing a large volume of large multicalls.
     It's not so bright, but should quickly bring the batch size down to something reasonable for your node.
     """
-    __slots__ = "step", 
     def __init__(self) -> None:
         self.step = 10000
     
