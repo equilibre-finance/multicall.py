@@ -185,8 +185,8 @@ MULTICALL3_ADDRESSES: Dict[int,str] = {
     Network.Kava: "0x30A62aA52Fa099C4B227869EB6aeaDEda054d121",
     Network.Neon: "",
     Network.NeonTestnet: "0x25ca3395E673DEDd37345639F65D011844931f1C",
-    Network.Scroll: "",
-    Network.ScrollSepolia: "0x3a4420401d769B8a7755B537c04aD03238614E7e"
+    Network.Scroll: "0xcA11bde05977b3631167028862bE2a173976CA11",
+    Network.ScrollSepolia: "0xcA11bde05977b3631167028862bE2a173976CA11"
 }
 
 # With default AsyncBaseProvider settings, some dense calls will fail
