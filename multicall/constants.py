@@ -102,7 +102,7 @@ MULTICALL_ADDRESSES: Dict[int,str] = {
     Network.KavaTestnet: "0x1Af096bFA8e495c2F5Eeb56141E7E2420066Cf78",
     Network.Neon: "",
     Network.NeonTestnet: "0xcFC8002c27985410F7a5Df76f418E5F1a460e1eb",
-    Network.Scroll: "",
+    Network.Scroll: "0x87a6417F03E106A05698F18829bB3a40CBC54f61",
     Network.ScrollSepolia: "0xA17786896F1b5CF22600925cB680998cae8401f5"
 }
 
@@ -124,6 +124,7 @@ MULTICALL2_ADDRESSES: Dict[int,str] = {
     Network.Optimism: '0x2DC0E2aa608532Da689e89e237dF582B783E552C',
     Network.OptimismKovan: '0x2DC0E2aa608532Da689e89e237dF582B783E552C',
     Network.Kava: '0x45be772faE4a9F31401dfF4738E5DC7DD439aC0b',
+    Network.Scroll: "0x83048f0Bf34FEeD8CEd419455a4320A735a92e9d"
 }
 
 # based on https://github.com/mds1/multicall#readme
@@ -185,7 +186,7 @@ MULTICALL3_ADDRESSES: Dict[int,str] = {
     Network.Kava: "0x30A62aA52Fa099C4B227869EB6aeaDEda054d121",
     Network.Neon: "",
     Network.NeonTestnet: "0x25ca3395E673DEDd37345639F65D011844931f1C",
-    Network.Scroll: "0xcA11bde05977b3631167028862bE2a173976CA11",
+    Network.Scroll: "0xd152CD6F9cf76921759d3f51f743651e549f6925",
     Network.ScrollSepolia: "0xcA11bde05977b3631167028862bE2a173976CA11"
 }
 
